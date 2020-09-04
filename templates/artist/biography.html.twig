@@ -1,0 +1,7 @@
+
+<h3>Biographie</h3>
+{% if artist.biography == null %}
+    <p>Il n'y a pas de biograhie pour {{artist.name}}. Si vous voulez en ajouter une cliquez sur modifier {{artist.name}}</p>
+{% else %}
+    <p>{{artist.biography}}</p>
+{% endif %}

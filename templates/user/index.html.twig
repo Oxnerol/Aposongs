@@ -1,0 +1,91 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ApoSongs | Profil de {{app.user.username}}{% endblock %}
+
+{% block body %}
+
+<div class="col-10 mx-auto">
+
+    {% for message in app.flashes('passChange') %}
+        <div class="flash-notice">
+            {{ message }}
+        </div>
+    {% endfor %}
+    
+    <div class="row">
+        <table class="table col-lg-5">
+            <tr>
+                <th>Pseudo :</th>
+                <td>{{app.user.username}}</td>
+            </tr>
+            <tr>
+                <th>Email :</th>
+                <td>{{app.user.email}}</td>
+            </tr>
+        </table>
+        <div class="col" >
+            <button id="newPass" class="btn btn-primary mt-2">Changer de mot de passe</button>
+            <button id="newMail" class="btn btn-primary mt-2">Changer d'adresse mail</button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-4 mt-3" id="form">
+
+            
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block customScript %}
+    <script>
+    
+        function test() {
+            $("button").click(function(e){
+                switch (this.id) {
+                    case 'newPass':
+                        
+                        $('#form').html(`{{form(changePass)}}`)
+                        localStorage.setItem("flag", "pass");
+
+                        break;
+
+                    case 'newMail':
+
+                        $('#form').html(`{{form(changeMail)}}`)
+                        localStorage.setItem("flag", "mail");
+    
+                        break;
+                
+                    default:
+                        break;
+                }
+                
+            });
+        }
+
+
+        $( document ).ready(function() {
+            test();
+
+            if(localStorage.getItem("flag") == "mail"){
+                
+                $('#newMail').trigger('click');
+                localStorage.removeItem("flag");
+
+            }
+            if(localStorage.getItem("flag") == "pass"){
+                
+                $('#newPass').trigger('click');                
+                localStorage.removeItem("flag");
+                
+            }
+
+
+        });
+
+    </script>
+{% endblock %}

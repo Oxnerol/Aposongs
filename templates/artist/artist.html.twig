@@ -1,0 +1,196 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ApoSongs | {{artist.name}}{% endblock %}
+
+{% block body %}
+
+    <div class="col-12">    
+        {% if is_granted('ROLE_EDITOR')%}
+            <a href="{{path('admin_artists_list')}}" class="btn btn-warning mb-2 mt-3 mt-md-0">Retour à la page de moderation</a><br>
+        {% endif %}
+
+        <div class="row justify-content-between">
+            <div class="col-lg-9 ">
+                <div class="row mb-4 mb-lg-0">
+                    <h2 class="col-lg text-center text-lg-left">{{artist.name}}</h2>
+                    <div class="col-lg">
+                        <a href="{{path('artist_edit',{slug : artist.slug})}}" class="d-none d-lg-block col- mr-3 btn btn-primary py-2 float-lg-right">Proposer une modification</a>
+                        <a href="{{path('artist_edit',{slug : artist.slug})}}" class="d-block d-lg-none col btn btn-primary btn-blockt">Proposer une modification</a>
+                    </div>
+                </div>
+                
+                <nav class="navbar navbar-expand-lg bg-primary navbar-dark">
+                    
+                    <button class="navbar-toggler btn-block" type="button" data-toggle="collapse" data-target="#collapsibleNavbar2">
+                        <span class="navbar-toggler-icon"></span>
+                        <a class="navbar-brand">Menu {{artist.name}}</a>
+                    </button>
+                    <div class="collapse navbar-collapse" id="collapsibleNavbar2">
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <button class="btn btn-primary" id="biography">Biographie</button>
+                            </li>
+                            <li class="nav-item">
+                                <button class="btn btn-primary" id="discography">Discographie</button>
+                            </li>   
+                            <li class="nav-item">
+                                <button class="btn btn-primary" id="tracks">Morceaux</button>
+                            </li>
+                            <li class="nav-item">
+                                <button class="btn btn-primary" id="videos">Videos</button>
+                            </li>
+                        </ul>
+                    </div>  
+                </nav>
+
+                <div class="artistContener">
+                    <div class="d-none d-lg-block">
+                    {{ include ('artist/biography.html.twig')}}
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-lg-3">
+                <article class="bg-success">
+                    <img class="mx-auto mt-3 d-block img-fluid" src="{{asset ('img/bands/' ~ artist.logoimg)}}" alt="{{artist.altImg}}">
+                    <hr>
+                    <table class="table">
+                        <tr>
+                            <th>Années actives</th>
+                            <td>
+                                {{artist.bandActivityStart}}  -->  
+                                {% if artist.bandActivityEnd is not null %}
+                                    Fin {{artist.bandActivityEnd}}
+                                {% else %}
+                                    En activité
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Genre musical</th>
+                            
+                            {% set genres = artist.genre %}
+                            {% if genres|length < 0 %}
+                                <td>Aucun</td>
+                            {% else %}
+                                <td>   
+                                    {% for genre in genres %}
+                                        {{genre.name}}
+                                        {% if not loop.last %}
+                                        /
+                                        {% endif %}
+                                        
+                                    {% endfor %}
+                                </td>
+                            {% endif %}
+
+                        </tr>
+                        <tr>
+                            <th>Sous Genre</th>
+                            
+                            {% set genres = artist.genre %}
+                            {% if genres|length < 0 %}
+                                <td>Aucun</td>
+                            {% else %}
+                                <td>   
+                                    {% for genre in genres %}
+                                        {{genre.name}}
+                                        {% if not loop.last %}
+                                        /
+                                        {% endif %}
+                                        
+                                    {% endfor %}
+                                </td>
+                            {% endif %}
+                        </tr>
+                    </table>
+                    <hr>
+                    <table class="table">
+                        <tr>
+                            <th>Membres</th>
+                            <td></td>
+                        </tr>
+                    </table>
+                    <hr>
+                    <table class="table">
+                        <tr>
+                            <th>Ancien membres</th>
+                            <td></td>
+                        </tr>
+                    </table>
+                    {% for link in artist.link %}
+                    {% if loop.first %}
+                    <hr>
+                    <table class="table">  
+                    {% endif %} 
+                        
+                        <tr>
+                            <th>{{link.name}}</th>
+                            <td><a href="{{link.url}}">{{link.url}}</a></td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                    
+                    </p>
+                </article>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block customScript %}
+<script>
+
+
+function activateClick(){
+    $("button").unbind('click');
+    $("button").click(function(e){
+        switch (this.id) {
+            case 'biography':
+                $(".artistContener").html(`{{ include ("artist/biography.html.twig")}}`);
+                console.log('biography');
+
+                break;
+
+            case 'discography':
+                $(".artistContener").html(`{{ include ("artist/discography.html.twig")}}`);
+                console.log('discography');
+
+                break;
+
+            case 'tracks':
+                $(".artistContener").html(`{{ include ("artist/tracks.html.twig")}}`);
+                console.log('tracks');
+                activateClick();
+                
+                break;
+
+            case 'videos':
+                $(".artistContener").html(`{{ include ("artist/videos.html.twig")}}`);
+                console.log('videos');
+                break;
+
+
+        }
+        if(this.value){
+                $("#lyric").html("<p>"+ this.value +"</p>");
+            
+
+        }
+                
+
+
+    });
+}
+
+    $( document ).ready(function() {
+
+        activateClick();
+
+    });
+
+    </script>
+
+{% endblock %}

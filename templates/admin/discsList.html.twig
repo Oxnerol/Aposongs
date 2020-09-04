@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ApoSongs | Liste disques{% endblock %}
+
+{% block body %}
+
+    <table class="table d-none d-lg-block">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Voir</th>
+                <th>Modifier</th>
+                <th>Supprimer</th>
+            </tr>
+            
+        </thead>
+        <tbody>
+        {% for disc in discs %}
+            <tr>
+                <td>{{disc.name}}</td>
+                <td><a class="btn btn-primary" href="{{path('disc_read', {id : disc.id})}}">Voir</a></td>
+                <td><a class="btn btn-warning" href="{{path('disc_read', {id : disc.id})}}">Modifier</a></td>
+                <td><a class="btn btn-danger" href="{{path('admin_disc_delete',{'id' : disc.id})}}">Supprimer</a></td>
+
+
+
+            </tr>            
+        {% endfor %}
+
+        </tbody>
+    
+    </table>
+
+    <div class="container mt-3 mt-md-0 mb-md-0 mb-3">
+        {% for disc in discs %}
+            <div class="row">
+                <div class="col d-block d-lg-none mb-3 bg-light">
+                    <h3>{{disc.name}}</h3>
+                    <div class="row">
+                        <div class="col">
+                            <a class="btn btn-primary" href="{{path('disc_read', {id : disc.id})}}">Voir</a>
+                            <a class="btn btn-warning" href="{{path('disc_read', {id : disc.id})}}">Modifier</a>
+                            <a class="btn btn-danger" href="{{path('admin_disc_delete',{'id' : disc.id})}}">Supprimer</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        <div class="row">
+            <div class="mx-auto">
+                {{ knp_pagination_render(discs, '@KnpPaginator/Pagination/twitter_bootstrap_v4_pagination.html.twig') }}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

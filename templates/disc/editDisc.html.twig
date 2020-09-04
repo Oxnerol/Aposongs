@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ApoSongs | Modification du disque {{discName}}{% endblock %}
+
+{% block body %}
+
+<div class="col-lg-10 mx-auto mt-3 mt-md-0">
+    {{ form_start(form) }}
+    <h2>Modification du disque {{discName}}</h2>
+
+    <hr>
+
+    <h3>Éléments obligatoires signalés par *</h3>
+
+    {{form_row(form.name)}}
+    {{form_row(form.cover)}}
+    {{form_row(form.altImg)}}
+    {{ form_end(form) }}
+
+    <hr>
+</div>
+    
+{% endblock %}
+
+{% block customScript %}
+    <script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.js"></script>
+    <script>
+    
+    $(document).ready(function (e) {
+        
+        bsCustomFileInput.init()
+        
+    });
+
+    </script>
+
+{% endblock %}

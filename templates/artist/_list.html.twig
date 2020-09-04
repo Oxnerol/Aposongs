@@ -1,0 +1,19 @@
+{% if artists is empty %}
+    <p>Il n'y a pas de l'artist que vous cherchez. Si vous voulez l'ajouter une cliquez sur ajouter un artiste</p>
+{% endif %}
+
+{% for artist in artists %} 
+    <div class="col-md-6 col-lg-4 bg-secondary p-2">
+        <div class="row">
+            <div class="col-6">
+                <a href="{{path('artist_read', {slug : artist.slug})}}">
+                    <img src="{{asset ('img/bands/' ~ artist.logoimg) }}" alt="{{artist.altImg}}" class="img-fluid mx-auto d-block">
+                </a>
+            </div>
+
+            <div class="col-6">
+                <a href="{{path('artist_read', {slug : artist.slug})}}"><h3>{{artist.name}}</h3></a>
+            </div>
+        </div>
+    </div>
+{% endfor %}

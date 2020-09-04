@@ -1,0 +1,120 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Aposongs | Decouverte d'artisite{% endblock %}
+
+{% block body %}
+
+     <div class="col-12 mx-auto">
+
+        <div class="row">
+            <div class="col text-center mt-3 mt-md-0" id="affichageAudio">
+                <p>Cliquez sur le bouton pour découvrir des artistes de tous les genres confondu</p>
+                <p>Au bout de 3 secondes, 2 boutons vont apparaitre</p>
+                <div class="nextTrack-exemple col-12 col-lg-3">Changer de morceau</div> <p>pour passer au morceau suivant</p>
+                <div class="seeInfo-exemple col-12 col-lg-3">Voir l'artiste</div> <p>pour voir les informations sur l'artiste</p>
+                <p><b>Bonne découverte</b></p>
+                
+                <button id="randomSong" class="btn btn-warning mb-3 col-12 col-lg-3">Lire un morceaux aléatoirement</button>
+            </div>
+        </div>
+
+    </div> 
+
+
+{% endblock %}
+    
+{% block customScript %}
+<script>
+
+    var infoBand;
+
+    function showButton(infoBand) {
+        $('#affichageAudio').append('\
+                <button id="randomSong" class="btn btn-warning mt-2 col-12 col-lg-3">Changer de morceau</button><br>\
+                <button id="bandInfoBtn" class="btn btn-primary mt-2 col-12 col-lg-3">Voir l\'artiste</button><div id="bandInfo" class="col-12 col-lg-5 mx-auto mt-3">\
+            ');
+       
+        $('#bandInfoBtn').click(function(e){
+            $('#bandInfo').html("\
+                    <h4>Nom de l'artiste : "+infoBand.artist.name+"</h4>\
+                    <p class='mt-3'>Morceau : "+infoBand.title+"</p>\
+                    <a target='_blank' href='https://www.deezer.com/fr/artist/"+infoBand.artist.id+"'>Lien Deezer du groupe</a>\
+                ")
+
+        })
+
+        ajaxCall();
+    }
+
+    function ajaxCall(){
+        $('#randomSong').click(function(e){
+            $('#randomSong').unbind()
+            e.preventDefault();
+            
+            $.ajax({
+                url: '{{path('random_Track')}}',
+                type: 'GET',
+                dataType : 'JSON',
+                success : function(code_html, statut){
+
+                },
+
+                error : function(resultat, statut, erreur){
+                    
+                    $('#affichageAudio').html('<h2>Erreure lors du chargement du morceau</h2>')
+                    showButton(infoBand);
+
+                },
+
+complete : function(resultat, statut){                 
+
+    if(statut == 'success'){
+        if(resultat.responseJSON != "false"){
+        $('#affichageAudio').html('\
+                    <div id="song" class="container-audio">\
+                        <audio controls loop>\
+                        <source src="" type="audio/ogg">Your browser dose not Support the audio Tag</audio>\
+                    </div>\
+                ')
+            document.getElementById('song').innerHTML = '<audio id="audio-player" controls="controls" src="' 
+            + resultat.responseJSON.preview + '"type="audio/mpeg">';
+            infoBand = resultat.responseJSON;
+
+            audio = document.getElementById('audio-player');
+            audio.play();    
+            $('#bandInfo').html('');   
+            setTimeout(function() { 
+                showButton(infoBand);
+            }, 4000);
+        }
+        else{
+            $('#affichageAudio').html('<h2>Il est impossible de charger une musique</h2>')
+            $('#affichageAudio').append('\
+            <button id="randomSong" class="btn btn-warning mt-2 col-12 col-lg-2">Changer de morceau</button><br>');
+            ajaxCall();
+        }
+    }
+    else{
+        $('#affichageAudio').html('<h2>Il est impossible de charger une musique</h2>')
+        $('#affichageAudio').append('\
+        <button id="randomSong" class="btn btn-warning mt-2 col-12 col-lg-2">Changer de morceau</button><br>');
+        ajaxCall();
+
+    }
+
+
+}
+            });
+        });
+       
+    }
+      
+    $( document ).ready(function() {
+
+        ajaxCall()
+
+    });
+
+</script>
+{% endblock %}
+

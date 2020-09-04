@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ApoSongs |
+    {{musician.nickname}} 
+    {% if musician.firstName is not null %}{{'/ ' ~ musician.firstName}}{% endif %}
+    {% if musician.lastName is not null %}{{musician.lastName}}{% endif %}
+{% endblock %}
+
+{% block body %}
+
+    <div class="col-12">    
+        {% if is_granted('ROLE_EDITOR')%}
+            <a href="{{path('admin_musicians_list')}}" class="btn btn-warning mb-2 mt-3 mt-md-0">Retour à la page de moderation</a><br>
+        {% endif %}    
+        <div class="row justify-content-between">
+            <div class="col-lg-9 ">
+                <div class="row mb-4 mb-lg-0">
+                    <h2 class="col-lg">
+                        {{musician.nickname}} 
+                        {% if musician.firstName is not null %}{{'"alias" ' ~ musician.firstName}}{% endif %}
+                        {% if musician.lastName is not null %}{{musician.lastName}}{% endif %}
+                    </h2>
+                   <div class="col-lg">
+                        <a href="{{path('musician_edit',{id : musician.id})}}" class="d-none d-lg-block col- mr-3 btn btn-primary py-2 float-lg-right">Proposer une modification</a>
+                        <a href="{{path('musician_edit',{id : musician.id})}}" class="d-block d-lg-none col btn btn-primary btn-blockt">Proposer une modification</a>
+                    </div>
+                </div>
+
+
+                <div class="d-none d-lg-block">
+                    <h2>Biography</h2>
+                    {{musician.biography}}
+                </div>
+
+            </div>
+
+            <div class="col-lg-3">
+                <article class="bg-success">
+                    <img class="mx-auto mt-3 d-block img-fluid" src="{{asset ('/img/musicians/' ~ musician.musicianImg)}}" alt="{{musician.altImg}}">
+                    <hr>
+                    <table class="table">
+                        <tr>
+                            <th>Date de naissance</th>
+                            <td>
+                                {{musician.born|date('d/M/Y')}}
+                            </td>
+                        </tr>
+                        {% if musician.death is not null %}
+                        <tr>
+                            <th>décès</th>
+                            <td>{{musician.death|date('d/M/Y')}}</td>
+                        </tr>
+                        {% endif %}
+                    </table>
+                </article>
+            </div>
+        </div>
+
+        <div class="d-block d-lg-none">
+            <h2>Biography</h2>
+            {{musician.biography}}
+        </div>
+
+    </div>
+
+    
+{% endblock %}

@@ -1,0 +1,18 @@
+<h3>Morceau</h3>
+        {% if discs == [] %}
+            <p>Il n'y a pas de morceau pour {{artist.name}}. Si vous voulez en ajouter une cliquez sur modifier {{artist.name}}</p>
+        {% else %}
+        <ul>
+        {% for disc in discs %}
+            {% set discN = loop.index0 %}
+            <li>{{disc.name}}</li>
+            <ul>
+                {% for track in disc.tracks %}
+                
+                    <li><button value="{{track.lyric}}">{{track.name}}</button></li>
+                {% endfor %}
+            </ul>
+        {% endfor %}
+        </ul>
+    {% endif %}
+</div>

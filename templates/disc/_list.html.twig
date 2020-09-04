@@ -1,0 +1,23 @@
+{% if discs is empty %}
+    <p>Il n'y a pas de le disque que vous cherchez. Si vous voulez l'ajouter une cliquez sur ajouter un disque</p>
+{% endif %}
+
+{% for disc in discs %} 
+    <div class="col-md-6 col-lg-4 bg-secondary p-2">
+        <div class="row">
+            <div class="col-6">
+                <a href="{{path('disc_read', {id : disc.id})}}">
+                    <img src="{{asset ('img/discs/' ~ disc.cover) }}" alt="{{disc.altImg}}" class="img-fluid">
+                </a>
+            </div>
+
+            <div class="col-6">
+                <a href="{{path('disc_read', {id : disc.id})}}">
+                    <h3>
+                        {{disc.name}}
+                    </h3>
+                </a>
+            </div>
+        </div>
+    </div>
+{% endfor %}

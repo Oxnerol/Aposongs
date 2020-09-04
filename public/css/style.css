@@ -1,0 +1,92 @@
+/* Header Bar*/
+
+.botNavBar{
+    margin-bottom: 1000px;
+}
+
+.nextTrack-exemple{
+    background-color: #ffbb33;
+    color: black;
+    border-radius: 5px;
+    display: inline-block;
+}
+
+.seeInfo-exemple{
+    background-color: #33b5e5;
+    color: white;
+    border-radius: 5px;
+    display: inline-block;
+}
+/* FONT LIST*/
+
+h1{
+    
+}
+
+h2{
+
+}
+
+h3{
+
+}
+
+h4{
+
+}
+
+h5{
+
+}
+
+p{
+
+}
+
+a{
+
+}
+
+/* LIST OF COLOR */
+
+.bg-lightgreen{
+
+    background-color: lightgreen;
+
+}
+
+/* IMG */
+
+/* .img-table img{
+    width: 150px;
+} */
+
+/* */
+nav ul{
+
+    list-style: none;
+    display:inline;
+    
+
+}
+nav li {
+    float: left;
+    margin-right: 10px;
+}
+nav a{
+    color: black;
+}
+
+/* */
+
+.table td, .table th{
+    border-top: none;
+}
+
+/* CSS FOR PHONE */
+
+.phone img{
+    width: 200px;
+}
+
+

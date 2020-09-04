@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ApoSongs | Toutes les news{% endblock %}
+
+{% block body %}
+    <div class="col mt-3 mt-md-0">
+        {% if news is empty %}
+        <h2>Il y a pas de News pour le moment</h2>
+        {% else %}
+            {% for new in news %}
+                <div class="row">
+                    <div class="col">
+                        <h2>{{new.title}}</h2>
+                        <h4>par {{new.author}} le {{new.creationDate|date("Y-m-d H:i:s")|format_datetime('full', 'short', locale='fr')}}</h4>
+                        {% if new.updateAuthor %}<h5>Modifié par {{new.updateAuthor}} le {{new.updateDate|date("Y-m-d H:i:s")|format_datetime('full', 'short', locale='fr')}}</h5>{% endif %}
+                        <p>{{ new.textField|length > 100 ? new.textField|slice(0, 100) ~ '...' : new.textField  }}</p>
+                        <a href="{{path('news_read', {'id': new.id})}}" class="btn btn-primary">Voir l'article</a>
+                        <hr>
+                        <br>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="mx-auto">
+            {{ knp_pagination_render(news, '@KnpPaginator/Pagination/twitter_bootstrap_v4_pagination.html.twig') }}
+        </div>
+    </div>
+
+
+{% endblock %}

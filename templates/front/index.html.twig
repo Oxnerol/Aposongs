@@ -1,0 +1,174 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ApoSongs l'archive musical{% endblock %}
+
+{% block body %}
+
+    <div class="col-lg-2 d-none d-lg-block">
+        <div class="row mb-3">
+            <table class="table">
+                <tr>
+                    <td class="p-0 pr-2"><h3>Groupe du jour</h3></td>
+                </tr>
+                <tr>
+                    <td class="p-0 pr-2">
+                        {% if artist is empty %}
+                            <p>Il n'y a pas de groupe a afficher</p>
+                        {% else %}
+                        <a href="{{path('artist_read', {slug : artist.slug})}}">
+                            <h4>{{artist.name}}</h4>
+                        </a> 
+                        {% endif %} 
+                    </td>
+                </tr>
+                <tr>
+                    <td class="p-0 pr-2">
+                        {% if artist is empty %}
+                            
+                        {% else %}
+                        <a href="{{path('artist_read', {slug : artist.slug})}}">
+                            <img class="img-fluid"src="{{asset ('img/bands/' ~ artist.logoimg) }}" alt="{{artist.altImg}}">
+                        </a> 
+                        {% endif %} 
+                    </td>
+                </tr>     
+            </table>   
+        </div>
+
+        <div class="row">
+            <table class="table">
+                <tr>
+                    <td class="p-0 pr-2"><h3>Album du jour</h3></td>
+                </tr>
+                <tr>
+                    <td class="p-0 pr-2">
+                        {% if disc is empty %}
+                            <p>Il n'y a pas de disque a afficher</p>
+                        {% else %}
+                        <a href="{{path('disc_read', {id : disc.id})}}">
+                            <h4>{{disc.name}}</h4>
+                        </a> 
+                        {% endif %} 
+                    </td>
+                </tr>
+                <tr>
+                    <td class="p-0 pr-2">
+                        {% if disc is empty %}
+                            
+                        {% else %}
+                        <a href="{{path('disc_read', {id : disc.id})}}">
+                            <img class="img-fluid"src="{{asset ('img/discs/' ~ disc.cover) }}" alt="{{disc.altImg}}">
+                        </a> 
+                        {% endif %} 
+                    </td>
+                </tr>     
+            </table>  
+        </div>
+    </div>
+
+    <div class="col-12 d-lg-none phone">
+
+        <table class="table text-center">
+            <thead>
+                <tr>
+                    <th>Groupe du jour</th>
+                    <th>Album du jour</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr >
+                    <td class="pb-0">
+                        {% if artist is empty %}
+                            <p>Il n'y a pas de groupe a afficher</p>
+                        {% else %}
+                        <a href="{{path('artist_read', {slug : artist.slug})}}">
+                            {{artist.name}}
+                        </a> 
+                        {% endif %}   
+                    </td>
+                    <td class="pb-0">
+                        {% if disc is empty %}
+                            <p>Il n'y a pas de disque a afficher</p>
+                        {% else %}
+                        <a href="{{path('disc_read', {id : disc.id})}}">
+                            {{disc.name}}
+                        </a> 
+                        {% endif %}   
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        {% if artist is empty %}
+                            
+                        {% else %}
+                        <a href="{{path('artist_read', {slug : artist.slug})}}">
+                            <img class="img-fluid"src="{{asset ('img/bands/' ~ artist.logoimg) }}" alt="{{artist.altImg}}">
+                        </a> 
+                        {% endif %}   
+                    </td>
+                    <td>
+                        {% if disc is empty %}
+                            
+                        {% else %}
+                        <a href="{{path('disc_read', {id : disc.id})}}">
+                            <img class="img-fluid"src="{{asset ('img/discs/' ~ disc.cover) }}" alt="{{disc.altImg}}">
+                        </a> 
+                        {% endif %}   
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-lg-8">
+        <h2>Dernière news</h2>
+        <hr>
+        {% if news is empty %}
+        <h2>Il y a pas de News pour le moment</h2>
+        {% else %}
+            {% for new in news %}
+                <div class="row">
+                    <div class="col">
+                        <h2>{{new.title}}</h2>
+                        <h4>par {{new.author}} le {{new.creationDate|date("Y-m-d H:i:s")|format_datetime('full', 'short', locale='fr')}}</h4>
+                        {% if new.updateAuthor %}<h5>Modifié par {{new.updateAuthor}} le {{new.updateDate|date("Y-m-d H:i:s")|format_datetime('full', 'short', locale='fr')}}</h5>{% endif %}
+                        <p>{{ new.textField|length > 100 ? new.textField|slice(0, 100) ~ '...' : new.textField  }}</p>
+                        <a href="{{path('news_read', {'id': new.id})}}" class="btn btn-primary">Voir l'article</a>
+                        <hr>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <div class="col-lg-2 d-none d-lg-block">
+        <h3>Dernier ajout</h3>
+        {% for newCont in newConts %}
+            <div class="row my-4">
+                <div class="col">
+                    <h3>
+                    {% if newCont.category == "disc" %}
+                        Disque
+                    {% elseif newCont.category == "artist" %}
+                        Artiste
+                    {% else %}
+                        Personnalité
+                    {% endif %}
+                    </h3>
+                    <h3>{{newCont.name}}</h3>
+
+                    {% if newCont.category == 'artist' %}
+                        <a href="{{path(newCont.category ~ '_read',{'slug': newCont.redirect})}}" class="btn btn-primary">Voir l'artiste</a>
+                    {% elseif newCont.category == "disc" %}
+                        <a href="{{path(newCont.category ~ '_read',{'id': newCont.redirect})}}" class="btn btn-primary">Voir le disque</a>
+                    {% else %}
+                        <a href="{{path(newCont.category ~ '_read',{'id': newCont.redirect})}}" class="btn btn-primary">Voir la personnalité</a>
+                    {% endif %}
+                    
+                    
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    
+{% endblock %}

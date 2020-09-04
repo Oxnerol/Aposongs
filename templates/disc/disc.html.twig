@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ApoSongs | {{disc.name}}{% endblock %}
+
+{% block body %}
+
+    <div class="col-12">
+
+        {% if is_granted('ROLE_EDITOR')%}
+            <a href="{{path('admin_discs_list')}}" class="btn btn-warning mb-2 mt-3 mt-md-0">Retour à la page de moderation</a><br>
+        {% endif %}    
+        <div class="row justify-content-between">
+            <div class="col-lg-9 mt-3 mt-md-0">
+                <div class="row mb-4 mb-lg-0">
+                    <h2 class="col-lg text-center text-lg-left">{{disc.name}}</h2>
+                    <div class="col-lg">
+                        <a href="{{path('disc_edit', {id : disc.id})}}" class="d-none d-lg-block col- mr-3 btn btn-primary py-2 float-lg-right">Proposer une modification</a>
+                        <a href="{{path('disc_edit', {id : disc.id})}}" class="d-block d-lg-none col btn btn-primary btn-blockt">Proposer une modification</a>
+                    </div>
+                </div>
+
+
+                <div class="artistContener">
+                    <div class="d-none d-lg-block">
+                        <h2>test</h2>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-lg-3">
+                <article class="bg-success">
+                    <img class="mx-auto mt-3 d-block img-fluid" src="{{asset ('img/discs/' ~ disc.cover)}}" alt="{{disc.altImg}}">
+                    <hr>
+                    <table class="table">
+                        <tr>
+                            <th>Sorti</th>
+                            <td>
+                                {{disc.releaseDate|date("m/d/Y", "Europe/Paris")}}  -->  
+    
+                            </td>
+                        </tr>
+                        
+                    </table>
+                    
+                </article>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

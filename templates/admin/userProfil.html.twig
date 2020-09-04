@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ApoSongs | {{user.username}}{% endblock %}
+
+{% block body %}
+
+<div class="col-lg-10 mx-auto">
+
+    
+    <div class="row">
+        <div class="col-lg-4 mt-3 mt-md-0">
+            <a class="btn btn-success"href="{{path('admin_user_list')}}">Revenir a la liste des utilisateurs</a>
+            <a class="btn btn-warning"href="{{path('admin_user_prodil_edit',{'id' : user.id})}}">Modifier Utiliseur</a>
+            
+            <h2>Pseudo : {{user.username}}</h2>
+            <h3>Email : {{user.email}}</h3>
+            <h3>Role : {% for role in user.roles %}
+                {{role}}</h3>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-4 mt-3" id="form">
+
+            
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
+
+

@@ -1,0 +1,154 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ApoSongs | Liste des disques{% endblock %}
+
+{% block body %}
+
+    <div class="col-12">
+
+        <div class="row justify-content-between">
+            <div class="col-lg-9">
+                <div class="row justify-content-between">
+                    <div class="col-lg-5">                            
+                        <div class="input-group mt-3 mt-md-0 mb-3">
+                            <input id="inputSearchBtn" class="form-control py-4 py-lg-0" type="text" placeholder="Search" aria-label="Search">
+                            <div class="input-group-append">
+                                <button id="searchBtn" class="btn btn-primary" type="button">Recherche</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 d-none d-lg-block">
+                        <a href="{{path('disc_add')}}" class="btn btn-primary float-right">Ajouter un artiste</a>                        
+                    </div>
+                    <div class="col-12 d-block d-lg-none">
+                        <a href="{{path('disc_add')}}" class="btn btn-block btn-primary py-3">Ajouter un artiste</a>                        
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                {% if discs == [] %}
+                    <div class="col">
+                        <p>Il n'y a pas de le disque que vous cherchez. Si vous voulez l'ajouter une cliquez sur ajouter un artiste</p>
+                    </div>
+                {% else %}
+                    <div class='col'>
+                        <div id="zoneAjax">
+                            {{ include ('disc/_list_pagination.html.twig')}}
+                        </div>
+                    </div>
+                {% endif %}
+
+                </div>
+            </div>
+            <div class="col-lg-2 d-none d-lg-block bg-success img-table">
+                <h3>Derniers disques ajoutés</h3>
+                <div class="row">
+                    <table class="table">
+                        {% for disc in lastDiscs|sort((a, b) => b.id <=> a.id)|slice(0, 5) %}
+                            <tr class="pb-0">
+                                <td class="pb-0">    
+                                    <a href="{{path('disc_read', {id : disc.id})}}">
+                                        <img src="{{asset ('img/discs/' ~ disc.cover) }}" alt="{{disc.altImg}}" class="img-fluid">
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr class="pt-0">
+                                <td class="pt-0">
+                                    <a href="{{path('disc_read', {id : disc.id})}}">
+                                        <h3>
+                                            {{disc.name}}
+                                        </h3>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+{% endblock %}
+
+{% block customScript %}
+<script>
+
+    function callAjax(searchKey) {
+
+            checkSearch = searchKey.search('<script>');
+            checkSearch = searchKey.search('<\/script>');
+            checkSearch = searchKey.search('\/');
+
+        if(searchKey == "" || searchKey == " " || checkSearch != -1){
+            searchKey = "";
+            var url = "{{ (path('disc')) }}}";
+        }
+        else{
+            
+            var url = "{{ (path('disc_search', {'search': 'ReplaceMeWithCorrectValue'})) }}";
+
+            url = url.replace("ReplaceMeWithCorrectValue", searchKey);            
+        }
+        
+
+        
+        $.ajax({
+            url: url,
+            type: 'GET',
+            dataType : 'html',
+            success : function(code_html, statut){
+                
+            },
+
+            error : function(resultat, statut, erreur){
+                
+                
+            },
+
+            complete : function(resultat, statut){                
+                /* test = JSON.parse(resultat.responseJSON) */
+                console.log(resultat);
+                
+                if (resultat.responseText != " ") {
+                    $("#zoneAjax").html(resultat.responseText);
+                    //$("#pageBtn").show();
+                }
+                else{
+                    $("#listDisc").html('\
+                                        <div class="col-12 py-1">\
+                                                <h2>Le disque que vous cherchez est introvable</h2>\
+                                        </div>\
+                                        ')  
+                    //$("#pageBtn").hide()
+
+                }
+  
+            }
+        });
+
+    }
+
+    $( document ).ready(function() {
+
+        $('#inputSearchBtn').keypress(function(event){
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if(keycode == '13'){
+                var searchKey = $('#inputSearchBtn').val()
+                callAjax(searchKey);
+            }
+
+        });
+
+        $('#searchBtn').click(function(e){
+            e.preventDefault();
+            var searchKey = $('#inputSearchBtn').val()
+            callAjax(searchKey);
+            
+        });
+
+
+    });
+
+</script>
+{% endblock %}

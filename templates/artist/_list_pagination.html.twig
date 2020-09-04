@@ -1,0 +1,35 @@
+{% set pageUp = nPage + 1 %}
+{% set pageDown = nPage - 1 %}
+<div class="row" id="listArtists">
+    {{ include ('artist/_list.html.twig')}}
+</div>
+<div class="row justify-content-between mt-3 mb-sm-3" id="pageBtn">
+    {% if nPage == 0 and changePageFlag == true %}
+        <div class="col text-center">
+            <a href="{{path('artist', {page : pageUp})}}" class="btn btn-primary">Page suivante</a>  
+        </div>
+    {% elseif changePageFlag == true %}
+    <div class="col-lg-12 d-none d-lg-block">
+        <div class="col">
+            <a href="{{path('artist', {page : pageDown})}}" class="btn btn-primary">Page precedente</a>  
+            <a href="{{path('artist', {page : pageUp})}}" class="btn btn-primary float-right">Page suivante</a>  
+        </div> 
+    </div>
+    
+    <div class="col-lg-2 d-block d-lg-none">
+        <div class="col mb-3">
+            <a href="{{path('artist', {page : pageDown})}}" class="btn btn-primary btn-block py-3">Page precedente</a>  
+        </div>
+        <div class="col">
+            <a href="{{path('artist', {page : pageUp})}}" class="btn btn-primary btn-block py-3">Page suivante</a>  
+        </div> 
+    </div>
+    {% elseif nPage != 0 %}
+        <div class="col text-center">
+            <a href="{{path('artist', {page : pageDown})}}" class="btn btn-primary">Page precedente</a>  
+        </div>
+            
+
+    {% endif %}
+    
+</div>

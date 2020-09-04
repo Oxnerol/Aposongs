@@ -1,0 +1,28 @@
+{% if musicians is empty %}
+    <p>Il n'y a pas l'artist que vous cherchez. Si vous voulez l'ajouter une cliquez sur ajouter un artiste</p>
+{% endif %}
+
+{% for musician in musicians %}
+    <div class="col-md-6 col-lg-4 bg-secondary p-2">
+        <div class="row">
+            <div class="col-6">
+                <a href="{{path('musician_read', {id : musician.id})}}">
+                    <img src="{{asset ('img/musicians/' ~ musician.musicianImg) }}" alt="{{musician.altImg}}" class="img-fluid">
+                </a>
+            </div>
+
+            <div class="col-6">
+                <a href="{{path('musician_read', {id : musician.id})}}">
+                    <h3>
+                        {% if musician.nickname is not null %}{{musician.nickname}}{% endif %}
+                    </h3>
+                    <h3>
+                        {{musician.firstName}} 
+                        {% if musician.lastName is not null %}{{musician.lastName}}{% endif %}
+                    </h3>
+                    
+                </a>
+            </div>
+        </div>
+    </div>
+{% endfor %}

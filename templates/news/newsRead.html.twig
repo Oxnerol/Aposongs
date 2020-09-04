@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ApoSongs | {{news.title}}{% endblock %}
+
+{% block body %}
+    <div class="col mt-3 mt-md-0">
+    {% if is_granted('ROLE_EDITOR')%}
+        <a href="{{path('admin_news_list')}}" class="btn btn-warning mb-2">Retour à la page de moderation</a><br>
+    {% endif %}
+    <a href="{{path('news')}}" class="btn btn-primary">Retour à la liste des News</a>
+        <div class="row mt-3">
+            <div class="col">
+                <h2>{{news.title}}</h2>
+                <h4>par {{news.author}} le {{news.creationDate|date("Y-m-d H:i:s")|format_datetime('full', 'short', locale='fr')}}</h4>
+                {% if news.updateAuthor %}<h5>Modifié par {{news.updateAuthor}} le {{news.updateDate|date("Y-m-d H:i:s")|format_datetime('full', 'short', locale='fr')}}</h5>{% endif %}
+                <p>{{ news.textField}}</p>
+                <hr>
+                <br>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
